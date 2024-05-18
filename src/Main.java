@@ -37,12 +37,21 @@ class Calculator {
             String[] rim = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
             String[] arab = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
+            int a = 0;
+            int b = 0;
+
             String num1 = parts[0];
             String opr = parts[1];
             String num2 = parts[2];
 
-            int a = get(num1);
-            int b = get(num2);
+            if (search(arab, num1) && search(arab, num2)){
+                a = Integer.parseInt(num1);
+                b = Integer.parseInt(num2);
+            } else {
+                a = get(num1);
+                b = get(num2);
+            }
+
             int ans = switch (opr) {
                 case "+" -> a + b;
                 case "-" -> a - b;
