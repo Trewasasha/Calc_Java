@@ -30,7 +30,9 @@ class Calculator {
         Scanner sc = new Scanner(System.in);
         System.out.print("Введите пример: ");
         String primer = sc.nextLine();
-
+        if (primer.length() > 5) {
+            throw new Error();
+        }
         try {
             String[] parts = primer.split(" ");
 
@@ -71,6 +73,7 @@ class Calculator {
             if (a < 1 || b < 1) {
                 throw new Error();
             }
+
         } catch (Exception e) {
             throw new Error();
         }
