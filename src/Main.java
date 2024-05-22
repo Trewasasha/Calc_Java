@@ -1,19 +1,10 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 class Calculator {
-
-    public static boolean search(String[] arr, String x) {
-        for (String i : arr) {
-            if (i.equals(x)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static String intToRoman(int num) {
+    public static String calc(int num) {
         if (num < 1 || num > 3999) {
-            throw new IllegalArgumentException("Number should be in range [1, 3999]");
+            throw new Error();
         }
         String[] M = {"", "M", "MM", "MMM"};
         String[] C = {"", "C", "CC", "CCC", "CD", "D",
@@ -23,64 +14,70 @@ class Calculator {
         String[] I = {"", "I", "II", "III", "IV", "V",
                 "VI", "VII", "VIII", "IX"};
 
-        return M[num / 1000] + C[(num % 1000) / 100] + X[(num % 100) / 10] + I[num % 10];
+        return M[num / 1000] + C[(num % 1000) / 100]
+                + X[(num % 100) / 10] + I[num % 10];
     }
 
     public static void main(String[] args) {
+        int ans;
+        int a;
+        int b;
         Scanner sc = new Scanner(System.in);
         System.out.print("Введите пример: ");
         String primer = sc.nextLine();
-        if (primer.length() > 5) {
-            throw new Error();
-        }
+
+        String[] arab = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+        String[] rim = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+        boolean flag_rim = false;
+
         try {
             String[] parts = primer.split(" ");
+            if(parts.length != 3) {
+                throw new java.lang.Error();
 
-            String[] rim = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
-            String[] arab = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-
-            int a = 0;
-            int b = 0;
-
-            String num1 = parts[0];
-            String opr = parts[1];
-            String num2 = parts[2];
-
-            if (search(arab, num1) && search(arab, num2)){
-                a = Integer.parseInt(num1);
-                b = Integer.parseInt(num2);
-            } else {
-                a = get(num1);
-                b = get(num2);
             }
+            if ((Arrays.binarySearch(rim, parts[0]) >= 0) && (Arrays.binarySearch(rim, parts[2]) >= 0)) {
+                flag_rim = true;
+            }
+            a = perevod(parts, 0);
+            b = perevod(parts, 2);
 
-            int ans = switch (opr) {
+            ans = switch (parts[1]) {
                 case "+" -> a + b;
                 case "-" -> a - b;
                 case "*" -> a * b;
                 case "/" -> a / b;
-                default -> 0;
+                default -> throw new Error();
             };
 
-            if ((search(arab, num1) && search(rim, num2)) || (search(arab, num2) && search(rim, num1))) {
+            String a1 = parts[0];
+            String b1 = parts[2];
+
+            if ((Arrays.binarySearch(arab, a1) >= 0) && (Arrays.binarySearch(rim, b1) >= 0)) { // Выводит индекс
                 throw new Error();
-            } else if ((search(rim, num1) && search(rim, num2))) {
-                System.out.println(intToRoman(ans));
-            } else if ((search(arab, num1) && search(arab, num2))) {
+            }
+            if ((Arrays.binarySearch(arab, b1) >= 0) && (Arrays.binarySearch(rim, a1) >= 0)) { // Выводит индекс
+                throw new Error();
+            }
+            if ((a < 1) | (a > 10) | (b < 1) | (b > 10)) {
+                throw new java.lang.Error();
+            }
+
+            if (flag_rim == true) {
+                System.out.println((calc(ans)));
+            } else {
                 System.out.println(ans);
             }
 
-            if (a < 1 || b < 1) {
-                throw new Error();
-            }
+
 
         } catch (Exception e) {
-            throw new Error();
+            throw new java.lang.Error();
         }
     }
 
-    private static int get(String num) {
-        return switch (num) {
+    private static int perevod(String[] parts, int x) {
+        int a = switch (parts[x]) {
             case "I" -> 1;
             case "II" -> 2;
             case "III" -> 3;
@@ -91,7 +88,8 @@ class Calculator {
             case "VIII" -> 8;
             case "IX" -> 9;
             case "X" -> 10;
-            default -> 0;
+            default -> Integer.parseInt(parts[x]);
         };
+        return a;
     }
 }
